@@ -1,0 +1,28 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Mukta', 'Noto Sans Devanagari', 'Inter', sans-serif;
+  --font-sans--font-feature-settings: 'cv11';
+
+  /* Vedic Sanskaar रंग पैलेट */
+  --color-saffron: #F39A43;   /* केसरिया - मुख्य रंग */
+  --color-maroon: #834C13;    /* गहरा लाल-बैंगनी */
+  --color-gold: #FFD700;      /* स्वर्ण */
+  --color-cream: #FFF7EA;     /* क्रीम हल्का रंग */
+  --color-yellow: #F9BB4D;    /* पीला */
+  --color-earth: #C6A15A;     /* पृथ्वी का रंग */
+
+  /* विभिन्न यूआई तत्व */
+  --bg-primary: var(--color-cream);
+  --bg-card: var(--color-saffron);
+  --bg-footer: var(--color-maroon);
+
+  /* टेक्स्ट रंग */
+  --text-main: var(--color-maroon);
+  --text-accent: var(--color-gold);
+
+  /* आइकन और प्रतीक रंग */
+  --icon-vedic: var(--color-earth);
+}
+
+/* Tailwind के एक्सटेंशन में रंग जोड़ें (tailwind.config.js में): */
