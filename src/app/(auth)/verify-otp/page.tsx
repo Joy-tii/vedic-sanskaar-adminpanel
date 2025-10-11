@@ -1,3 +1,5 @@
+"use client";
+
 import OTPInput from '@/components/otp-input'
 import { useState } from 'react'
 
