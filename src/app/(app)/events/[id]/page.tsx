@@ -17,16 +17,12 @@ interface User {
   email: string
   city: string
   sanskaarCount: number
-
   yearsMember: number
-
   familyCount: number
- 
-   sanskaarChange: string // always set in data, e.g., '+2%', '0%', or ''
+  sanskaarChange: string
   memberChange: string
   familyChange: string
 }
-
 
 interface Activity {
   id: string
@@ -36,9 +32,10 @@ interface Activity {
   remarks: string
 }
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  let { id } = params
-  let user: User | null = await getUser(id)
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const resolvedParams = await params
+  const { id } = resolvedParams
+  const user: User | null = await getUser(id)
 
   if (!user) {
     return { title: 'User Not Found' }
@@ -49,10 +46,12 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   }
 }
 
-export default async function UserPage({ params }: { params: { id: string } }) {
-  let { id } = params
-  let user: User | null = await getUser(id)
-  let activities: Activity[] = await getUserActivities(id)
+export default async function UserPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params
+  const { id } = resolvedParams
+
+  const user: User | null = await getUser(id)
+  const activities: Activity[] = await getUserActivities(id)
 
   if (!user) {
     notFound()

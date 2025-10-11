@@ -3,27 +3,28 @@ import { Heading, Subheading } from '@/components/heading'
 import { Select } from '@/components/select'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/table'
 import { getRecentOrders } from '@/data'
+import { Stat } from '@/components/Stat'
 
 // ✅ Updated Stat component to accept className
-export function Stat({
-  title,
-  value,
-  change,
-  className,
-}: {
-  title: string
-  value: string
-  change: string
-  className?: string
-}) {
-  return (
-    <div className={`p-4 rounded-lg bg-[var(--color-cream)] ${className || ''}`}>
-      <p className="text-sm text-[var(--text-main)]">{title}</p>
-      <p className="text-xl font-bold text-[var(--color-saffron)]">{value}</p>
-      <p className="text-sm text-[var(--text-main)]">{change}</p>
-    </div>
-  )
-}
+// export function Stat({
+//   title,
+//   value,
+//   change,
+//   className,
+// }: {
+//   title: string
+//   value: string
+//   change: string
+//   className?: string
+// }) {
+//   return (
+//     <div className={`p-4 rounded-lg bg-[var(--color-cream)] ${className || ''}`}>
+//       <p className="text-sm text-[var(--text-main)]">{title}</p>
+//       <p className="text-xl font-bold text-[var(--color-saffron)]">{value}</p>
+//       <p className="text-sm text-[var(--text-main)]">{change}</p>
+//     </div>
+//   )
+// }
 
 export default async function Home() {
   let orders = await getRecentOrders()
