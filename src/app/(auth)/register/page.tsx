@@ -10,6 +10,7 @@ import { Heading } from '@/components/heading'
 import { Input } from '@/components/input'
 import { Select } from '@/components/select'
 import { Strong, Text, TextLink } from '@/components/text'
+import { API_BASE_URL } from '@/utils/api'  // ✅ add this
 
 export default function Register() {
   const router = useRouter()
@@ -26,13 +27,15 @@ export default function Register() {
     setError(null)
     setLoading(true)
     try {
-      const res = await fetch('/api/auth/register', {
+      const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          name,
           email,
           password,
-          profile: { name, country, subscribe },
+          country,
+          subscribe,
         }),
       })
       const data = await res.json()
@@ -41,7 +44,8 @@ export default function Register() {
       } else {
         setError(data.message || 'Registration failed')
       }
-    } catch {
+    } catch (err) {
+      console.error(err)
       setError('Network error. Please try again later.')
     } finally {
       setLoading(false)
@@ -49,7 +53,10 @@ export default function Register() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="grid w-full max-w-sm grid-cols-1 gap-8 bg-[var(--color-cream)] p-8 rounded-lg shadow-lg">
+    <form
+      onSubmit={handleSubmit}
+      className="grid w-full max-w-sm grid-cols-1 gap-8 bg-[var(--color-saffron)] p-8 rounded-lg shadow-lg"
+    >
       <div className="flex justify-center">
         <Logo className="h-12 text-[var(--color-maroon)]" />
       </div>
@@ -57,43 +64,70 @@ export default function Register() {
         Join the Vedic Sanskaar Community
       </Heading>
       {error && <Text className="mb-4 text-red-600 font-semibold">{error}</Text>}
+
       <Field>
-        <Label className="text-[var(--color-maroon)]" htmlFor="email">Email Address</Label>
-        <Input type="email" name="email" id="email" required
+        <Label className="text-[var(--color-maroon)]" htmlFor="email">
+          Email Address
+        </Label>
+        <Input
+          type="email"
+          name="email"
+          id="email"
+          required
           placeholder="your.email@domain.com"
-          className="border-[var(--color-earth)] focus:ring-[var(--color-saffron)]"
+          className="border-[var(--color-earth)] focus:ring-[var(--color-yellow)]"
           value={email}
-          onChange={e => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
           disabled={loading}
         />
       </Field>
+
       <Field>
-        <Label className="text-[var(--color-maroon)]" htmlFor="name">Full Name</Label>
-        <Input type="text" name="name" id="name" required
+        <Label className="text-[var(--color-maroon)]" htmlFor="name">
+          Full Name
+        </Label>
+        <Input
+          type="text"
+          name="name"
+          id="name"
+          required
           placeholder="Your full name"
-          className="border-[var(--color-earth)] focus:ring-[var(--color-saffron)]"
+          className="border-[var(--color-earth)] focus:ring-[var(--color-yellow)]"
           value={name}
-          onChange={e => setName(e.target.value)}
+          onChange={(e) => setName(e.target.value)}
           disabled={loading}
         />
       </Field>
+
       <Field>
-        <Label className="text-[var(--color-maroon)]" htmlFor="password">Password</Label>
-        <Input type="password" name="password" id="password" required
+        <Label className="text-[var(--color-maroon)]" htmlFor="password">
+          Password
+        </Label>
+        <Input
+          type="password"
+          name="password"
+          id="password"
+          required
           autoComplete="new-password"
           placeholder="********"
-          className="border-[var(--color-earth)] focus:ring-[var(--color-saffron)]"
+          className="border-[var(--color-earth)] focus:ring-[var(--color-yellow)]"
           value={password}
-          onChange={e => setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
           disabled={loading}
         />
       </Field>
+
       <Field>
-        <Label className="text-[var(--color-maroon)]" htmlFor="country">Select Your Country</Label>
-        <Select name="country" id="country"
-          className="border-[var(--color-earth)] focus:ring-[var(--color-saffron)]"
-          required value={country}
-          onChange={e => setCountry(e.target.value)}
+        <Label className="text-[var(--color-maroon)]" htmlFor="country">
+          Select Your Country
+        </Label>
+        <Select
+          name="country"
+          id="country"
+          className="border-[var(--color-earth)] focus:ring-[var(--color-yellow)]"
+          required
+          value={country}
+          onChange={(e) => setCountry(e.target.value)}
           disabled={loading}
         >
           <option value="">-- Choose Country --</option>
@@ -103,6 +137,7 @@ export default function Register() {
           <option value="United States">United States</option>
         </Select>
       </Field>
+
       <CheckboxField>
         <Checkbox
           name="subscribe"
@@ -115,9 +150,11 @@ export default function Register() {
           I wish to receive updates and spiritual insights from the Vedic Sanskaar community.
         </Label>
       </CheckboxField>
+
       <Button type="submit" color="maroon" className="w-full font-bold" disabled={loading}>
         {loading ? 'Creating Account...' : 'Create Account'}
       </Button>
+
       <Text className="text-[var(--color-maroon)] text-center">
         Already have an account?{' '}
         <TextLink href="/login" className="text-[var(--color-gold)] hover:underline">

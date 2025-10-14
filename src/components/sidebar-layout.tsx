@@ -52,9 +52,9 @@ export function SidebarLayout({
   let [showSidebar, setShowSidebar] = useState(false)
 
   return (
-    <div className="relative isolate flex min-h-svh w-full max-lg:flex-col bg-white lg:bg-white dark:bg-[#834C13] dark:lg:bg-[#7B4A00]">
+    <div className="relative isolate flex min-h-svh w-full max-lg:flex-col bg-white lg:bg-white dark:bg-[var(--color-maroon)] dark:lg:bg-[var(--color-gold)]">
       {/* Sidebar on desktop */}
-      <div className="fixed inset-y-0 left-0 w-64 max-lg:hidden bg-[#F39A43] shadow-lg ring-1 ring-[#C6A15A] dark:ring-[#FFD700] dark:bg-[#B26A00]">
+      <div className="fixed inset-y-0 left-0 w-64 max-lg:hidden bg-[var(--color-saffron)] shadow-lg ring-1 ring-[var(--color-earth)] dark:ring-[var(--color-gold)] dark:bg-[var(--color-primary)]">
         {sidebar}
       </div>
 
@@ -64,19 +64,19 @@ export function SidebarLayout({
       </MobileSidebar>
 
       {/* Navbar on mobile */}
-      <header className="flex items-center px-4 lg:hidden bg-[#F9BB4D] dark:bg-[#8C5D04]">
+      <header className="flex items-center px-4 lg:hidden bg-[var(--color-yellow)] dark:bg-[var(--color-earth)]">
         <div className="py-2.5">
-          <NavbarItem onClick={() => setShowSidebar(true)} aria-label="Open navigation" className="text-[#834C13] dark:text-[#FFF7EA]">
+          <NavbarItem onClick={() => setShowSidebar(true)} aria-label="Open navigation" className="text-[var(--color-maroon)] dark:text-[var(--color-cream)]">
             <OpenMenuIcon />
           </NavbarItem>
         </div>
-        <div className="min-w-0 flex-1 text-[#834C13] dark:text-[#FFF7EA]">{navbar}</div>
+        <div className="min-w-0 flex-1 text-[var(--color-maroon)] dark:text-[var(--color-cream)]">{navbar}</div>
       </header>
 
       {/* Content */}
-      <main className="flex flex-1 flex-col pb-2 lg:min-w-0 lg:pt-2 lg:pr-2 lg:pl-64 bg-white dark:bg-[#7B4A00]">
-        <div className="grow p-6 lg:rounded-lg lg:bg-white lg:p-10 lg:shadow-md lg:ring-1 lg:ring-gray-200 dark:lg:bg-[#8C5D04] dark:lg:ring-[#FFD700]">
-          <div className="mx-auto max-w-6xl text-gray-800 dark:text-[#FFF7EA]">{children}</div>
+      <main className="flex flex-1 flex-col pb-2 lg:min-w-0 lg:pt-2 lg:pr-2 lg:pl-64 bg-white dark:bg-[var(--color-maroon)]">
+        <div className="grow p-6 lg:rounded-lg lg:bg-white lg:p-10 lg:shadow-md lg:ring-1 lg:ring-gray-200 dark:lg:bg-[var(--color-earth)] dark:lg:ring-[var(--color-gold)]">
+          <div className="mx-auto max-w-6xl text-gray-800 dark:text-[var(--color-cream)]">{children}</div>
         </div>
       </main>
     </div>

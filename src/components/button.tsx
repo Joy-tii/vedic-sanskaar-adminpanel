@@ -5,15 +5,10 @@ import { Link } from './link'
 
 const styles = {
   base: [
-    // Base styles
-    'relative isolate inline-flex items-baseline justify-center gap-x-2 rounded-lg border text-base/6 font-semibold',
-    // Sizing
-    'px-[calc(var(--spacing,1rem)*0.875-1px)] py-[calc(var(--spacing,1rem)*0.625-1px)] sm:px-[calc(var(--spacing,1rem)*0.75-1px)] sm:py-[calc(var(--spacing,1rem)*0.375-1px)] sm:text-sm/6',
-    // Focus styles using saffron color variable
-    'focus:not-data-focus:outline-hidden data-focus:outline-2 data-focus:outline-offset-2 data-focus:outline-[var(--color-saffron)]',
-    // Disabled styles
-    'data-disabled:opacity-50',
-    // Icon slot styling
+    'relative isolate inline-flex items-baseline justify-center gap-x-2 rounded-lg border font-semibold',
+    'px-4 py-2 sm:px-4 sm:py-2.5 sm:text-sm',
+    'focus:outline-2 focus:outline-offset-2 focus:outline-[var(--color-saffron)] focus:outline-not-data-focus:outline-hidden',
+    'disabled:opacity-50',
     '*:data-[slot=icon]:-mx-0.5 *:data-[slot=icon]:my-0.5 *:data-[slot=icon]:size-5 *:data-[slot=icon]:shrink-0 *:data-[slot=icon]:self-center',
     '*:data-[slot=icon]:text-[var(--btn-icon)] sm:*:data-[slot=icon]:my-1 sm:*:data-[slot=icon]:size-4',
   ],
@@ -41,24 +36,22 @@ const styles = {
     '[--btn-icon:var(--color-maroon)] data-active:[--btn-icon:var(--color-gold)] data-hover:[--btn-icon:var(--color-gold)]',
   ],
   colors: {
-  maroon: [
-    'text-white bg-[var(--color-maroon)] border-transparent',
-    'dark:bg-[var(--color-maroon)]',
-    '[--btn-icon:var(--color-gold)] data-active:[--btn-icon:var(--color-yellow)] data-hover:[--btn-icon:var(--color-yellow)]',
-  ],
-  gold: [
-    'text-[var(--color-maroon)] bg-[var(--color-gold)] border-transparent',
-    'dark:bg-[var(--color-gold)]',
-    '[--btn-icon:var(--color-maroon)] data-active:[--btn-icon:var(--color-saffron)] data-hover:[--btn-icon:var(--color-saffron)]',
-  ],
-  saffron: [
-    'text-[var(--text-main)] bg-[var(--color-saffron)] border-transparent',
-    'dark:bg-[var(--color-saffron)]',
-    '[--btn-icon:var(--text-main)] data-active:[--btn-icon:var(--color-yellow)] data-hover:[--btn-icon:var(--color-yellow)]',
-  ],
-  // no orange here for buttons on login page
-},
-
+    maroon: [
+      'text-white bg-[var(--color-maroon)] border-transparent',
+      'dark:bg-[var(--color-maroon)]',
+      '[--btn-icon:var(--color-gold)] data-active:[--btn-icon:var(--color-yellow)] data-hover:[--btn-icon:var(--color-yellow)]',
+    ],
+    gold: [
+      'text-[var(--color-maroon)] bg-[var(--color-gold)] border-transparent',
+      'dark:bg-[var(--color-gold)]',
+      '[--btn-icon:var(--color-maroon)] data-active:[--btn-icon:var(--color-saffron)] data-hover:[--btn-icon:var(--color-saffron)]',
+    ],
+    saffron: [
+      'text-[var(--text-main)] bg-[var(--color-saffron)] border-transparent',
+      'dark:bg-[var(--color-saffron)]',
+      '[--btn-icon:var(--text-main)] data-active:[--btn-icon:var(--color-yellow)] data-hover:[--btn-icon:var(--color-yellow)]',
+    ],
+  },
 }
 
 type ButtonProps = (
@@ -80,11 +73,11 @@ export const Button = forwardRef(function Button(
 
   return typeof props.href === 'string' ? (
     <Link {...props} className={classes} ref={ref as React.ForwardedRef<HTMLAnchorElement>}>
-      <TouchTarget>{children}</TouchTarget>
+      <span className="relative z-10">{children}</span>
     </Link>
   ) : (
     <Headless.Button {...props} className={clsx(classes, 'cursor-default')} ref={ref}>
-      <TouchTarget>{children}</TouchTarget>
+      <span className="relative z-10">{children}</span>
     </Headless.Button>
   )
 })

@@ -10,9 +10,6 @@ import { Heading } from '@/components/heading'
 import { Input } from '@/components/input'
 import { Strong, Text, TextLink } from '@/components/text'
 
-// rest of file...
-
-
 export default function Login() {
   const router = useRouter()
   const [email, setEmail] = useState('')
@@ -26,12 +23,13 @@ export default function Login() {
     setError(null)
     setLoading(true)
     try {
-      const res = await fetch('/api/auth/login', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       })
       const data = await res.json()
+
       if (res.ok && data.data?.tokens) {
         localStorage.setItem('accessToken', data.data.tokens.accessToken)
         localStorage.setItem('refreshToken', data.data.tokens.refreshToken)
@@ -39,7 +37,7 @@ export default function Login() {
       } else {
         setError(data.message || 'Invalid login credentials')
       }
-    } catch {
+    } catch (err) {
       setError('Network error. Please try again later.')
     } finally {
       setLoading(false)
@@ -66,7 +64,6 @@ export default function Login() {
             className="border-[var(--color-earth)] focus:ring-[var(--color-saffron)]"
             type="email"
             id="email"
-            name="email"
             required
             placeholder="your.email@example.com"
             value={email}
@@ -83,7 +80,6 @@ export default function Login() {
             className="border-[var(--color-earth)] focus:ring-[var(--color-saffron)]"
             type="password"
             id="password"
-            name="password"
             required
             placeholder="••••••••"
             value={password}
