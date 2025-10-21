@@ -45,75 +45,88 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center px-4">
-      <form onSubmit={handleSubmit} className="w-full max-w-md rounded-lg bg-[var(--bg-card)] p-8 shadow-lg">
+    <div className="min-h-screen bg-[var(--color-bg)] flex items-center justify-center px-4">
+      <form className="w-full max-w-md rounded-2xl bg-[var(--bg-card)] p-8 shadow-lg" onSubmit={handleSubmit}>
+        {/* Logo */}
         <div className="flex justify-center mb-6">
-          <Logo className="h-12 text-[var(--text-main)]" />
+          <Logo className="h-12 text-[var(--color-saffron)]" />
         </div>
-        <Heading className="text-[var(--text-main)] text-center mb-6 font-serif">
+
+        {/* Heading */}
+        <Heading className="text-[var(--color-gold)] text-center mb-6 font-serif">
           Sign in to your Vedic Sanskaar account
         </Heading>
 
-        {error && <Text className="mb-4 text-red-600 font-semibold">{error}</Text>}
+        {/* Error Message */}
+        {error && (
+          <Text className="mb-4 text-center text-[var(--color-error)] font-medium">
+            {error}
+          </Text>
+        )}
 
+        {/* Email Field */}
         <Field>
-          <Label className="text-[var(--text-main)]" htmlFor="email">
+          <Label className="text-[var(--color-maroon)] font-medium" htmlFor="email">
             Email Address
           </Label>
           <Input
-            className="border-[var(--color-earth)] focus:ring-[var(--color-saffron)]"
-            type="email"
             id="email"
+            type="email"
             required
             placeholder="your.email@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             disabled={loading}
+            className="border-[var(--color-earth)] focus:ring-[var(--color-saffron)] focus:border-[var(--color-saffron)]"
           />
         </Field>
 
+        {/* Password Field */}
         <Field>
-          <Label className="text-[var(--text-main)]" htmlFor="password">
+          <Label className="text-[var(--color-maroon)] font-medium" htmlFor="password">
             Password
           </Label>
           <Input
-            className="border-[var(--color-earth)] focus:ring-[var(--color-saffron)]"
-            type="password"
             id="password"
+            type="password"
             required
             placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             disabled={loading}
+            className="border-[var(--color-earth)] focus:ring-[var(--color-saffron)] focus:border-[var(--color-saffron)]"
           />
         </Field>
 
-        <div className="flex items-center justify-between mb-6 text-[var(--text-main)]">
+        {/* Remember + Forgot */}
+        <div className="flex items-center justify-between mb-6 text-[var(--color-text)]">
           <CheckboxField>
             <Checkbox
               id="remember"
               name="remember"
               checked={remember}
-              onChange={(checked: boolean) => setRemember(checked)}
+              onChange={(checked) => setRemember(checked)}
               disabled={loading}
             />
             <Label htmlFor="remember">Remember me</Label>
           </CheckboxField>
 
           <Text>
-            <TextLink href="/forgot-password" className="text-[var(--text-accent)] hover:underline">
+            <TextLink href="/forgot-password" className="text-[var(--color-accent)] hover:text-[var(--color-gold)] transition-colors">
               <Strong>Forgot password?</Strong>
             </TextLink>
           </Text>
         </div>
 
-        <Button type="submit" className="w-full font-bold" color="maroon" disabled={loading}>
+        {/* Submit Button */}
+        <Button type="submit" className="w-full font-bold" color="saffron" disabled={loading}>
           {loading ? 'Signing in...' : 'Login'}
         </Button>
 
-        <Text className="mt-6 text-center text-[var(--text-main)]">
+        {/* Footer Link */}
+        <Text className="mt-6 text-center text-[var(--color-text)]">
           Don’t have an account?{' '}
-          <TextLink href="/register" className="text-[var(--text-accent)] hover:underline">
+          <TextLink href="/register" className="text-[var(--color-accent)] hover:text-[var(--color-gold)] transition-colors">
             <Strong>Sign up</Strong>
           </TextLink>
         </Text>

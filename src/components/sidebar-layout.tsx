@@ -4,9 +4,10 @@ import * as Headless from '@headlessui/react'
 import React, { useState } from 'react'
 import { NavbarItem } from './navbar'
 
+/* ---------- ICONS ---------- */
 function OpenMenuIcon() {
   return (
-    <svg data-slot="icon" viewBox="0 0 20 20" aria-hidden="true" className="text-[#F39A43]">
+    <svg data-slot="icon" viewBox="0 0 20 20" aria-hidden="true" className="text-[var(--color-primary)]">
       <path d="M2 6.75C2 6.33579 2.33579 6 2.75 6H17.25C17.6642 6 18 6.33579 18 6.75C18 7.16421 17.6642 7.5 17.25 7.5H2.75C2.33579 7.5 2 7.16421 2 6.75ZM2 13.25C2 12.8358 2.33579 12.5 2.75 12.5H17.25C17.6642 12.5 18 12.8358 18 13.25C18 13.6642 17.6642 14 17.25 14H2.75C2.33579 14 2 13.6642 2 13.25Z" />
     </svg>
   )
@@ -14,12 +15,13 @@ function OpenMenuIcon() {
 
 function CloseMenuIcon() {
   return (
-    <svg data-slot="icon" viewBox="0 0 20 20" aria-hidden="true" className="text-[#834C13]">
+    <svg data-slot="icon" viewBox="0 0 20 20" aria-hidden="true" className="text-[var(--color-text-primary)]">
       <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
     </svg>
   )
 }
 
+/* ---------- MOBILE SIDEBAR ---------- */
 function MobileSidebar({ open, close, children }: React.PropsWithChildren<{ open: boolean; close: () => void }>) {
   return (
     <Headless.Dialog open={open} onClose={close} className="lg:hidden">
@@ -31,7 +33,7 @@ function MobileSidebar({ open, close, children }: React.PropsWithChildren<{ open
         transition
         className="fixed inset-y-0 w-full max-w-80 p-2 transition duration-300 ease-in-out data-closed:-translate-x-full"
       >
-        <div className="flex h-full flex-col rounded-lg bg-[#FFF7EA] shadow-lg ring-1 ring-[#C6A15A]">
+        <div className="flex h-full flex-col rounded-lg bg-[var(--color-background)] shadow-lg ring-1 ring-[var(--color-border)]">
           <div className="-mb-3 px-4 pt-3">
             <Headless.CloseButton as={NavbarItem} aria-label="Close navigation">
               <CloseMenuIcon />
@@ -44,17 +46,19 @@ function MobileSidebar({ open, close, children }: React.PropsWithChildren<{ open
   )
 }
 
+/* ---------- MAIN LAYOUT ---------- */
 export function SidebarLayout({
   navbar,
   sidebar,
   children,
 }: React.PropsWithChildren<{ navbar: React.ReactNode; sidebar: React.ReactNode }>) {
-  let [showSidebar, setShowSidebar] = useState(false)
+  const [showSidebar, setShowSidebar] = useState(false)
 
   return (
-    <div className="relative isolate flex min-h-svh w-full max-lg:flex-col bg-white lg:bg-white dark:bg-[var(--color-maroon)] dark:lg:bg-[var(--color-gold)]">
+    <div className="relative isolate flex min-h-svh w-full max-lg:flex-col bg-[var(--bg-primary)] dark:bg-[var(--color-maroon)]">
+      
       {/* Sidebar on desktop */}
-      <div className="fixed inset-y-0 left-0 w-64 max-lg:hidden bg-[var(--color-saffron)] shadow-lg ring-1 ring-[var(--color-earth)] dark:ring-[var(--color-gold)] dark:bg-[var(--color-primary)]">
+      <div className="fixed inset-y-0 left-0 w-64 max-lg:hidden bg-[var(--color-primary)] shadow-lg ring-1 ring-[var(--color-border)] dark:bg-[var(--color-gold)] dark:ring-[var(--color-earth)]">
         {sidebar}
       </div>
 
@@ -64,19 +68,27 @@ export function SidebarLayout({
       </MobileSidebar>
 
       {/* Navbar on mobile */}
-      <header className="flex items-center px-4 lg:hidden bg-[var(--color-yellow)] dark:bg-[var(--color-earth)]">
+      <header className="flex items-center px-4 lg:hidden bg-[var(--color-secondary)] dark:bg-[var(--color-primary)]">
         <div className="py-2.5">
-          <NavbarItem onClick={() => setShowSidebar(true)} aria-label="Open navigation" className="text-[var(--color-maroon)] dark:text-[var(--color-cream)]">
+          <NavbarItem
+            onClick={() => setShowSidebar(true)}
+            aria-label="Open navigation"
+            className="text-[var(--color-text-primary)] dark:text-[var(--color-cream)]"
+          >
             <OpenMenuIcon />
           </NavbarItem>
         </div>
-        <div className="min-w-0 flex-1 text-[var(--color-maroon)] dark:text-[var(--color-cream)]">{navbar}</div>
+        <div className="min-w-0 flex-1 text-[var(--color-text-primary)] dark:text-[var(--color-cream)]">
+          {navbar}
+        </div>
       </header>
 
       {/* Content */}
-      <main className="flex flex-1 flex-col pb-2 lg:min-w-0 lg:pt-2 lg:pr-2 lg:pl-64 bg-white dark:bg-[var(--color-maroon)]">
-        <div className="grow p-6 lg:rounded-lg lg:bg-white lg:p-10 lg:shadow-md lg:ring-1 lg:ring-gray-200 dark:lg:bg-[var(--color-earth)] dark:lg:ring-[var(--color-gold)]">
-          <div className="mx-auto max-w-6xl text-gray-800 dark:text-[var(--color-cream)]">{children}</div>
+      <main className="flex flex-1 flex-col pb-2 lg:min-w-0 lg:pt-2 lg:pr-2 lg:pl-64 bg-[var(--bg-card)] dark:bg-[var(--color-maroon)]">
+        <div className="grow p-6 lg:rounded-lg lg:bg-[var(--bg-card)] lg:p-10 lg:shadow-md lg:ring-1 lg:ring-[var(--color-border)] dark:lg:bg-[var(--color-earth)] dark:lg:ring-[var(--color-gold)]">
+          <div className="mx-auto max-w-6xl text-[var(--color-text-primary)] dark:text-[var(--color-cream)]">
+            {children}
+          </div>
         </div>
       </main>
     </div>

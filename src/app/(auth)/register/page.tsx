@@ -10,7 +10,7 @@ import { Heading } from '@/components/heading'
 import { Input } from '@/components/input'
 import { Select } from '@/components/select'
 import { Strong, Text, TextLink } from '@/components/text'
-import { API_BASE_URL } from '@/utils/api'  // ✅ add this
+import { API_BASE_URL } from '@/utils/api'
 
 export default function Register() {
   const router = useRouter()
@@ -55,18 +55,24 @@ export default function Register() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="grid w-full max-w-sm grid-cols-1 gap-8 bg-[var(--color-saffron)] p-8 rounded-lg shadow-lg"
+      className="grid w-full max-w-sm grid-cols-1 gap-8 bg-[var(--bg-card)] p-8 rounded-2xl shadow-lg"
     >
       <div className="flex justify-center">
-        <Logo className="h-12 text-[var(--color-maroon)]" />
+        <Logo className="h-12 text-[var(--color-saffron)]" />
       </div>
+
       <Heading className="text-[var(--color-maroon)] font-serif text-center">
         Join the Vedic Sanskaar Community
       </Heading>
-      {error && <Text className="mb-4 text-red-600 font-semibold">{error}</Text>}
+
+      {error && (
+        <Text className="mb-4 text-center text-[var(--color-error)] font-medium">
+          {error}
+        </Text>
+      )}
 
       <Field>
-        <Label className="text-[var(--color-maroon)]" htmlFor="email">
+        <Label className="text-[var(--color-maroon)] font-medium" htmlFor="email">
           Email Address
         </Label>
         <Input
@@ -75,7 +81,7 @@ export default function Register() {
           id="email"
           required
           placeholder="your.email@domain.com"
-          className="border-[var(--color-earth)] focus:ring-[var(--color-yellow)]"
+          className="border-[var(--color-earth)] focus:ring-[var(--color-gold)] focus:border-[var(--color-gold)]"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           disabled={loading}
@@ -83,7 +89,7 @@ export default function Register() {
       </Field>
 
       <Field>
-        <Label className="text-[var(--color-maroon)]" htmlFor="name">
+        <Label className="text-[var(--color-maroon)] font-medium" htmlFor="name">
           Full Name
         </Label>
         <Input
@@ -92,7 +98,7 @@ export default function Register() {
           id="name"
           required
           placeholder="Your full name"
-          className="border-[var(--color-earth)] focus:ring-[var(--color-yellow)]"
+          className="border-[var(--color-earth)] focus:ring-[var(--color-gold)] focus:border-[var(--color-gold)]"
           value={name}
           onChange={(e) => setName(e.target.value)}
           disabled={loading}
@@ -100,7 +106,7 @@ export default function Register() {
       </Field>
 
       <Field>
-        <Label className="text-[var(--color-maroon)]" htmlFor="password">
+        <Label className="text-[var(--color-maroon)] font-medium" htmlFor="password">
           Password
         </Label>
         <Input
@@ -110,7 +116,7 @@ export default function Register() {
           required
           autoComplete="new-password"
           placeholder="********"
-          className="border-[var(--color-earth)] focus:ring-[var(--color-yellow)]"
+          className="border-[var(--color-earth)] focus:ring-[var(--color-gold)] focus:border-[var(--color-gold)]"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           disabled={loading}
@@ -118,13 +124,13 @@ export default function Register() {
       </Field>
 
       <Field>
-        <Label className="text-[var(--color-maroon)]" htmlFor="country">
+        <Label className="text-[var(--color-maroon)] font-medium" htmlFor="country">
           Select Your Country
         </Label>
         <Select
           name="country"
           id="country"
-          className="border-[var(--color-earth)] focus:ring-[var(--color-yellow)]"
+          className="border-[var(--color-earth)] focus:ring-[var(--color-gold)] focus:border-[var(--color-gold)]"
           required
           value={country}
           onChange={(e) => setCountry(e.target.value)}
@@ -146,12 +152,12 @@ export default function Register() {
           onChange={(checked: boolean) => setSubscribe(checked)}
           disabled={loading}
         />
-        <Label className="text-[var(--color-maroon)]" htmlFor="subscribe">
+        <Label className="text-[var(--color-maroon)] font-medium" htmlFor="subscribe">
           I wish to receive updates and spiritual insights from the Vedic Sanskaar community.
         </Label>
       </CheckboxField>
 
-      <Button type="submit" color="maroon" className="w-full font-bold" disabled={loading}>
+      <Button type="submit" color="saffron" className="w-full font-bold" disabled={loading}>
         {loading ? 'Creating Account...' : 'Create Account'}
       </Button>
 

@@ -5,51 +5,59 @@ import { Link } from './link'
 
 const styles = {
   base: [
-    'relative isolate inline-flex items-baseline justify-center gap-x-2 rounded-lg border font-semibold',
-    'px-4 py-2 sm:px-4 sm:py-2.5 sm:text-sm',
+    'relative isolate inline-flex items-center justify-center gap-x-2 rounded-lg border font-semibold',
+    'px-4 py-2 sm:px-4 sm:py-2.5 sm:text-sm transition-colors duration-200',
     'focus:outline-2 focus:outline-offset-2 focus:outline-[var(--color-saffron)] focus:outline-not-data-focus:outline-hidden',
-    'disabled:opacity-50',
-    '*:data-[slot=icon]:-mx-0.5 *:data-[slot=icon]:my-0.5 *:data-[slot=icon]:size-5 *:data-[slot=icon]:shrink-0 *:data-[slot=icon]:self-center',
-    '*:data-[slot=icon]:text-[var(--btn-icon)] sm:*:data-[slot=icon]:my-1 sm:*:data-[slot=icon]:size-4',
+    'disabled:opacity-50 disabled:cursor-not-allowed',
+    '*:data-[slot=icon]:size-5 *:data-[slot=icon]:shrink-0 *:data-[slot=icon]:text-[var(--btn-icon)]',
   ],
+
+  // ✅ Solid buttons (filled)
   solid: [
-    'border-transparent bg-[var(--btn-border)]',
-    'dark:bg-[var(--btn-bg)]',
-    'before:absolute before:inset-0 before:-z-10 before:rounded-[calc(var(--radius-lg)-1px)] before:bg-[var(--btn-bg)]',
-    'before:shadow-sm',
-    'dark:before:hidden',
-    'dark:border-white/5',
+    'border-transparent',
+    'before:absolute before:inset-0 before:-z-10 before:rounded-[calc(var(--radius-lg)-1px)] before:bg-[var(--btn-bg)] before:shadow-sm',
+    'dark:before:hidden dark:border-white/5',
     'after:absolute after:inset-0 after:-z-10 after:rounded-[calc(var(--radius-lg)-1px)]',
     'after:shadow-[inset_0_1px_rgba(255,255,255,0.15)]',
-    'data-active:after:bg-[var(--btn-hover-overlay)] data-hover:after:bg-[var(--btn-hover-overlay)]',
-    'dark:after:-inset-px dark:after:rounded-lg',
-    'data-disabled:before:shadow-none data-disabled:after:shadow-none',
+    'hover:brightness-95 active:brightness-90',
   ],
+
+  // ✅ Outline buttons
   outline: [
-    'border-[var(--color-maroon)] text-[var(--color-maroon)] data-active:bg-[var(--color-maroon)/0.1] data-hover:bg-[var(--color-maroon)/0.1]',
-    'dark:border-[var(--color-gold)] dark:text-[var(--color-gold)] dark:data-active:bg-[var(--color-gold)/0.1] dark:data-hover:bg-[var(--color-gold)/0.1]',
-    '[--btn-icon:var(--color-maroon)] data-active:[--btn-icon:var(--color-gold)] data-hover:[--btn-icon:var(--color-gold)]',
+    'border-[var(--color-maroon)] text-[var(--color-maroon)]',
+    'hover:bg-[var(--color-maroon)] hover:text-white',
+    'active:bg-[var(--color-maroon)]/90',
+    '[--btn-icon:var(--color-maroon)] hover:[--btn-icon:white]',
   ],
+
+  // ✅ Plain buttons (text only)
   plain: [
-    'border-transparent text-[var(--color-maroon)] data-active:bg-[var(--color-maroon)/0.1] data-hover:bg-[var(--color-maroon)/0.1]',
-    'dark:text-[var(--color-gold)] dark:data-active:bg-[var(--color-gold)/0.1] dark:data-hover:bg-[var(--color-gold)/0.1]',
-    '[--btn-icon:var(--color-maroon)] data-active:[--btn-icon:var(--color-gold)] data-hover:[--btn-icon:var(--color-gold)]',
+    'border-transparent text-[var(--color-maroon)] bg-transparent',
+    'hover:bg-[var(--color-cream)] active:bg-[var(--color-background)]',
+    '[--btn-icon:var(--color-maroon)] hover:[--btn-icon:var(--color-saffron)]',
   ],
+
+  // ✅ Color variants
   colors: {
     maroon: [
       'text-white bg-[var(--color-maroon)] border-transparent',
-      'dark:bg-[var(--color-maroon)]',
-      '[--btn-icon:var(--color-gold)] data-active:[--btn-icon:var(--color-yellow)] data-hover:[--btn-icon:var(--color-yellow)]',
+      'hover:bg-[color-mix(in_srgb,var(--color-maroon)_90%,black)]',
+      '[--btn-bg:var(--color-maroon)] [--btn-icon:var(--color-gold)]',
     ],
     gold: [
       'text-[var(--color-maroon)] bg-[var(--color-gold)] border-transparent',
-      'dark:bg-[var(--color-gold)]',
-      '[--btn-icon:var(--color-maroon)] data-active:[--btn-icon:var(--color-saffron)] data-hover:[--btn-icon:var(--color-saffron)]',
+      'hover:bg-[color-mix(in_srgb,var(--color-gold)_90%,black)]',
+      '[--btn-bg:var(--color-gold)] [--btn-icon:var(--color-saffron)]',
     ],
     saffron: [
-      'text-[var(--text-main)] bg-[var(--color-saffron)] border-transparent',
-      'dark:bg-[var(--color-saffron)]',
-      '[--btn-icon:var(--text-main)] data-active:[--btn-icon:var(--color-yellow)] data-hover:[--btn-icon:var(--color-yellow)]',
+      'text-[var(--color-maroon)] bg-[var(--color-saffron)] border-transparent',
+      'hover:bg-[color-mix(in_srgb,var(--color-saffron)_90%,black)]',
+      '[--btn-bg:var(--color-saffron)] [--btn-icon:var(--color-gold)]',
+    ],
+    yellow: [
+      'text-[var(--color-maroon)] bg-[var(--color-secondary)] border-transparent',
+      'hover:bg-[color-mix(in_srgb,var(--color-secondary)_90%,black)]',
+      '[--btn-bg:var(--color-secondary)] [--btn-icon:var(--color-saffron)]',
     ],
   },
 }
@@ -67,24 +75,21 @@ export const Button = forwardRef(function Button(
   { color = 'saffron', outline, plain, className, children, ...props }: ButtonProps,
   ref: React.ForwardedRef<HTMLElement>
 ) {
-  let variantClass = outline ? styles.outline : plain ? styles.plain : styles.solid
-  let colorClass = color ? styles.colors[color] : []
-  let classes = clsx(className, styles.base, variantClass, colorClass)
+  const variantClass = outline ? styles.outline : plain ? styles.plain : styles.solid
+  const colorClass = color ? styles.colors[color] : []
+  const classes = clsx(className, styles.base, variantClass, colorClass)
 
   return typeof props.href === 'string' ? (
     <Link {...props} className={classes} ref={ref as React.ForwardedRef<HTMLAnchorElement>}>
-      <span className="relative z-10">{children}</span>
+      <TouchTarget>{children}</TouchTarget>
     </Link>
   ) : (
-    <Headless.Button {...props} className={clsx(classes, 'cursor-default')} ref={ref}>
-      <span className="relative z-10">{children}</span>
+    <Headless.Button {...props} className={classes} ref={ref}>
+      <TouchTarget>{children}</TouchTarget>
     </Headless.Button>
   )
 })
 
-/**
- * Expand the hit area to at least 44×44px on touch devices
- */
 export function TouchTarget({ children }: { children: React.ReactNode }) {
   return (
     <>

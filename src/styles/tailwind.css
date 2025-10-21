@@ -4,23 +4,32 @@
   --font-sans: 'Mukta', 'Noto Sans Devanagari', 'Inter', sans-serif;
   --font-sans--font-feature-settings: 'cv11';
 
-  /* Existing variable names but new colors */
-  --color-saffron: #4285F4;    /* Warm Yellow */
-  --color-maroon: #1E293B;     /* Dark Slate */
-  --color-gold: #F4B400;       /* Bright Sky Blue */
-  --color-cream: #FDF7F2;      /* Soft Beige */
-  --color-yellow: #64748B;     /* Muted Gray Blue */
-  --color-earth: #E2E8F0;      /* Light Gray */
+  /* Updated color variables from your upper theme */
+  --color-primary: #4285F4;        /* Bright Sky Blue - Headers, CTAs */
+  --color-secondary: #F4B400;      /* Warm Yellow - Accents, Highlights */
+  --color-background: #FDF7F2;     /* Soft Beige - Page Background */
+  --color-surface: #FFFFFF;        /* Pure White - Cards, Panels */
+  --color-text-primary: #1E293B;   /* Dark Slate - Main Text */
+  --color-text-secondary: #64748B; /* Muted Gray Blue - Subtext */
+  --color-border: #E2E8F0;         /* Light Gray - Borders */
 
-  /* UI elements unchanged variable names */
+  /* Alternative names for your UI */
+  --color-saffron: var(--color-primary);   /* Bright Sky Blue */
+  --color-maroon: var(--color-text-primary); /* Dark Slate */
+  --color-gold: var(--color-secondary);    /* Warm Yellow */
+  --color-cream: var(--color-background);  /* Soft Beige */
+  --color-yellow: var(--color-text-secondary); /* Muted Gray Blue */
+  --color-earth: var(--color-border);      /* Light Gray */
+
+  /* UI element mappings */
   --bg-primary: var(--color-cream);
-  --bg-card: var(--color-saffron);
+  --bg-card: var(--color-surface);
   --bg-footer: var(--color-maroon);
 
   /* Text colors */
-  --text-main: var(--color-maroon);
-  --text-accent: var(--color-gold);
+  --text-main: var(--color-text-primary);
+  --text-accent: var(--color-secondary);
 
   /* Icons */
-  --icon-vedic: var(--color-earth);
+  --icon-vedic: var(--color-primary);
 }

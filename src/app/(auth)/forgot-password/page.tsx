@@ -47,22 +47,26 @@ export default function ForgotPassword() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="grid w-full max-w-sm grid-cols-1 gap-8 bg-[var(--color-cream)] p-8 rounded-lg shadow-lg"
+      className="grid w-full max-w-sm grid-cols-1 gap-8 bg-[var(--color-cream)] p-8 rounded-2xl shadow-lg"
     >
+      {/* Logo */}
       <div className="flex justify-center">
-        <Logo className="h-12 text-[var(--color-maroon)]" />
+        <Logo className="h-12 text-[var(--color-saffron)]" />
       </div>
 
-      <Heading className="text-[var(--color-maroon)] font-serif text-center">
+      {/* Heading */}
+      <Heading className="text-[var(--color-maroon)] font-semibold text-center">
         Reset your password
       </Heading>
 
-      <Text className="text-[var(--color-maroon)] text-center">
-        Please enter your registered email address. We will send you a link to create a new password.
+      {/* Subtext */}
+      <Text className="text-[var(--color-text-secondary)] text-center">
+        Please enter your registered email address. We’ll send you a link to create a new password.
       </Text>
 
+      {/* Email Field */}
       <Field>
-        <Label className="text-[var(--color-maroon)]" htmlFor="email">
+        <Label className="text-[var(--color-maroon)] font-medium" htmlFor="email">
           Email Address
         </Label>
         <Input
@@ -73,32 +77,40 @@ export default function ForgotPassword() {
           onChange={(e) => setEmail(e.target.value)}
           value={email}
           placeholder="your.email@domain.com"
-          className="border-[var(--color-earth)] focus:ring-[var(--color-gold)]"
+          className="border-[var(--color-earth)] focus:ring-[var(--color-saffron)] focus:border-[var(--color-saffron)]"
         />
       </Field>
 
+      {/* Submit Button */}
       <Button
         type="submit"
-        color="maroon"
+        color="saffron"
         className="w-full font-bold"
         disabled={status === 'loading'}
       >
-        {status === 'loading' ? 'Sending...' : 'Reset password'}
+        {status === 'loading' ? 'Sending...' : 'Send OTP'}
       </Button>
 
+      {/* Message Feedback */}
       {message && (
         <Text
-          className={`text-center ${
-            status === 'success' ? 'text-green-600' : 'text-red-600'
+          className={`text-center font-medium ${
+            status === 'success'
+              ? 'text-[var(--color-saffron)]'
+              : 'text-[var(--color-secondary)]'
           }`}
         >
           {message}
         </Text>
       )}
 
+      {/* Footer Link */}
       <Text className="text-[var(--color-maroon)] text-center">
         Don’t have an account?{' '}
-        <TextLink href="/register" className="text-[var(--color-yellow)] hover:underline">
+        <TextLink
+          href="/register"
+          className="text-[var(--color-saffron)] hover:text-[var(--color-gold)] transition-colors"
+        >
           <Strong>Sign up here</Strong>
         </TextLink>
       </Text>
