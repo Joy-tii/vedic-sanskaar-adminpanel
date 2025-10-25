@@ -25,17 +25,14 @@ function CloseMenuIcon() {
 function MobileSidebar({ open, close, children }: React.PropsWithChildren<{ open: boolean; close: () => void }>) {
   return (
     <Headless.Dialog open={open} onClose={close} className="lg:hidden">
-      <Headless.DialogBackdrop
-        transition
-        className="fixed inset-0 bg-black/30 transition data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in"
-      />
+      <Headless.DialogBackdrop className="fixed inset-0 bg-black/30 transition-opacity data-[closed]:opacity-0" />
       <Headless.DialogPanel
         transition
-        className="fixed inset-y-0 w-full max-w-80 p-2 transition duration-300 ease-in-out data-closed:-translate-x-full"
+        className="fixed inset-y-0 left-0 w-72 p-2 bg-[var(--color-primary)] shadow-lg ring-1 ring-[var(--color-border)] transition-transform duration-300 data-[closed]:-translate-x-full"
       >
-        <div className="flex h-full flex-col rounded-lg bg-[var(--color-background)] shadow-lg ring-1 ring-[var(--color-border)]">
-          <div className="-mb-3 px-4 pt-3">
-            <Headless.CloseButton as={NavbarItem} aria-label="Close navigation">
+        <div className="flex h-full flex-col rounded-lg">
+          <div className="mb-3 px-4 pt-3 flex justify-end">
+            <Headless.CloseButton aria-label="Close navigation">
               <CloseMenuIcon />
             </Headless.CloseButton>
           </div>
@@ -51,44 +48,54 @@ export function SidebarLayout({
   navbar,
   sidebar,
   children,
-}: React.PropsWithChildren<{ navbar: React.ReactNode; sidebar: React.ReactNode }>) {
+  contentWide = false,
+}: React.PropsWithChildren<{
+  navbar: React.ReactNode
+  sidebar: React.ReactNode
+  contentWide?: boolean
+}>) {
   const [showSidebar, setShowSidebar] = useState(false)
 
   return (
-    <div className="relative isolate flex min-h-svh w-full max-lg:flex-col bg-[var(--bg-primary)] dark:bg-[var(--color-maroon)]">
-      
-      {/* Sidebar on desktop */}
-      <div className="fixed inset-y-0 left-0 w-64 max-lg:hidden bg-[var(--color-primary)] shadow-lg ring-1 ring-[var(--color-border)] dark:bg-[var(--color-gold)] dark:ring-[var(--color-earth)]">
-        {sidebar}
-      </div>
+    <div className="flex min-h-screen w-full flex-col bg-[var(--bg-primary)] lg:flex-row">
 
-      {/* Sidebar on mobile */}
+      {/* Sidebar for desktop */}
+      <aside className="hidden lg:flex lg:fixed lg:inset-y-0 lg:left-0 lg:w-64 lg:flex-col bg-[var(--color-primary)] dark:bg-[var(--color-gold)] text-white dark:text-[var(--color-cream)] shadow-lg ring-1 ring-[var(--color-border)]">
+        {sidebar}
+      </aside>
+
+      {/* Sidebar for mobile */}
       <MobileSidebar open={showSidebar} close={() => setShowSidebar(false)}>
         {sidebar}
       </MobileSidebar>
 
-      {/* Navbar on mobile */}
-      <header className="flex items-center px-4 lg:hidden bg-[var(--color-secondary)] dark:bg-[var(--color-primary)]">
-        <div className="py-2.5">
-          <NavbarItem
-            onClick={() => setShowSidebar(true)}
-            aria-label="Open navigation"
-            className="text-[var(--color-text-primary)] dark:text-[var(--color-cream)]"
-          >
-            <OpenMenuIcon />
-          </NavbarItem>
-        </div>
-        <div className="min-w-0 flex-1 text-[var(--color-text-primary)] dark:text-[var(--color-cream)]">
+      {/* Top navbar (mobile only) */}
+      <header className="flex items-center justify-between px-4 py-3 bg-[var(--color-primary)] dark:bg-[var(--color-primary)] lg:hidden">
+        <NavbarItem
+          onClick={() => setShowSidebar(true)}
+          aria-label="Open navigation"
+          className="text-[var(--color-text-primary)] dark:text-[var(--color-cream)]"
+        >
+          <OpenMenuIcon />
+        </NavbarItem>
+        <div className="flex-1 text-center text-[var(--color-text-primary)] dark:text-[var(--color-cream)]">
           {navbar}
         </div>
       </header>
 
-      {/* Content */}
-      <main className="flex flex-1 flex-col pb-2 lg:min-w-0 lg:pt-2 lg:pr-2 lg:pl-64 bg-[var(--bg-card)] dark:bg-[var(--color-maroon)]">
-        <div className="grow p-6 lg:rounded-lg lg:bg-[var(--bg-card)] lg:p-10 lg:shadow-md lg:ring-1 lg:ring-[var(--color-border)] dark:lg:bg-[var(--color-earth)] dark:lg:ring-[var(--color-gold)]">
-          <div className="mx-auto max-w-6xl text-[var(--color-text-primary)] dark:text-[var(--color-cream)]">
-            {children}
-          </div>
+      {/* Main content */}
+      <main
+        className={`flex flex-1 flex-col bg-[var(--bg-card)] dark:bg-[var(--color-maroon)] 
+        ${contentWide ? 'pl-0' : 'lg:pl-64'} transition-all`}
+      >
+        <div
+          className={`p-6 lg:p-10 w-full ${
+            contentWide
+              ? 'max-w-6xl mx-auto'
+              : 'max-w-6xl ml-0 text-left'
+          } text-[var(--color-text-primary)] dark:text-[var(--color-cream)]`}
+        >
+          {children}
         </div>
       </main>
     </div>

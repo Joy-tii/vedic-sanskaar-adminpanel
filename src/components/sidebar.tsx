@@ -13,18 +13,22 @@ export function Sidebar({ className, ...props }: React.ComponentPropsWithoutRef<
   return <nav {...props} className={clsx(className, 'flex h-full min-h-0 flex-col')} />
 }
 
+
+
 export function SidebarHeader({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
   return (
     <div
       {...props}
       className={clsx(
         className,
-        'flex flex-col border-b border-[var(--color-earth)] p-4 dark:border-[var(--color-cream)]',
+        'flex flex-col p-4 border-b border-[var(--color-earth)] dark:border-[var(--color-cream)]',
+        'bg-[var(--bg-primary)] dark:bg-[var(--color-maroon)]',
         '[&>[data-slot=section]+[data-slot=section]]:mt-2.5'
       )}
     />
   )
 }
+
 
 export function SidebarBody({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
   return (
@@ -107,17 +111,24 @@ export const SidebarItem = forwardRef(function SidebarItem(
     '*:data-[slot=icon]:size-6 *:data-[slot=icon]:shrink-0 *:data-[slot=icon]:fill-[var(--color-gold)] sm:*:data-[slot=icon]:size-5',
     '*:last:data-[slot=icon]:ml-auto *:last:data-[slot=icon]:size-5 sm:*:last:data-[slot=icon]:size-4',
 
-    // Hover & Active — now ORANGE based
-    'data-hover:bg-[var(--color-orange)]/10 data-hover:*:data-[slot=icon]:fill-[var(--color-orange)]',
-    'data-active:bg-[var(--color-orange)]/20 data-active:*:data-[slot=icon]:fill-[var(--color-orange)]',
+  // Hover & Active — stronger visible background so icons remain readable on hover
+  // Add standard :hover variants so Tailwind applies background color without any JS attribute helpers
+  'hover:bg-[var(--color-orange)]/30 hover:*:data-[slot=icon]:fill-[var(--color-orange)]',
+  'active:bg-[var(--color-orange)]/30 active:*:data-[slot=icon]:fill-[var(--color-orange)]',
+  // keep data-* variants for any JS-driven states (backwards compatible)
+  'data-hover:bg-[var(--color-orange)]/30 data-hover:*:data-[slot=icon]:fill-[var(--color-orange)]',
+  'data-active:bg-[var(--color-orange)]/30 data-active:*:data-[slot=icon]:fill-[var(--color-orange)]',
 
     // Current
     current && 'data-current:*:data-[slot=icon]:fill-[var(--color-orange)]',
 
-    // Dark Mode — warm glow
-    'dark:text-[var(--color-cream)] dark:*:data-[slot=icon]:fill-[var(--color-gold)]',
-    'dark:data-hover:bg-[var(--color-orange)]/15 dark:data-hover:*:data-[slot=icon]:fill-[var(--color-orange)]',
-    'dark:data-active:bg-[var(--color-orange)]/25 dark:data-active:*:data-[slot=icon]:fill-[var(--color-orange)]',
+  // Dark Mode — warm glow, make hover slightly stronger in dark too
+  'dark:text-[var(--color-cream)] dark:*:data-[slot=icon]:fill-[var(--color-gold)]',
+  'dark:hover:bg-[var(--color-gold)]/25 dark:hover:*:data-[slot=icon]:fill-[var(--color-orange)]',
+  'dark:active:bg-[var(--color-gold)]/30 dark:active:*:data-[slot=icon]:fill-[var(--color-orange)]',
+  // keep data-* dark variants as well
+  'dark:data-hover:bg-[var(--color-gold)]/25 dark:data-hover:*:data-[slot=icon]:fill-[var(--color-orange)]',
+  'dark:data-active:bg-[var(--color-gold)]/30 dark:data-active:*:data-[slot=icon]:fill-[var(--color-orange)]',
     current && 'dark:data-current:*:data-[slot=icon]:fill-[var(--color-gold)]',
 
     className
@@ -162,7 +173,7 @@ export function SidebarLabel({ className, ...props }: React.ComponentPropsWithou
   return (
     <span
       {...props}
-      className={clsx(className, 'truncate text-[var(--color-text-primary)] dark:text-[var(--color-cream)]')}
+      className={clsx(className, 'truncate text-white dark:text-[var(--color-cream)]')}
     />
   )
 }

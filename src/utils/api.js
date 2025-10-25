@@ -16,8 +16,26 @@ export async function fetchWithAuth(endpoint) {
   })
 
   if (!res.ok) {
-    console.error('API Error:', res.statusText)
-    throw new Error(`Request failed: ${res.status}`)
+    // Try to read a JSON error body for more informative logging
+    let bodyText = null
+    try {
+      const text = await res.text()
+      // try parse JSON but fall back to raw text
+      try {
+        const parsed = JSON.parse(text)
+        bodyText = JSON.stringify(parsed)
+      } catch (e) {
+        bodyText = text
+      }
+    } catch (e) {
+      bodyText = '<unreadable response body>'
+    }
+
+    console.error('API Error:', res.status, res.statusText, bodyText)
+    const err = new Error(`Request failed: ${res.status} ${res.statusText}`)
+    // attach extra info for callers / dev tools
+    err.info = { status: res.status, statusText: res.statusText, body: bodyText }
+    throw err
   }
 
   const data = await res.json()

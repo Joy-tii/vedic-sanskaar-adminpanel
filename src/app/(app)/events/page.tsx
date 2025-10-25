@@ -12,13 +12,17 @@ import { EllipsisVerticalIcon, MagnifyingGlassIcon } from '@heroicons/react/16/s
 import { API_BASE_URL } from '@/utils/api'
 
 interface User {
-  id: string | number
-  name: string
+  id: string
   email: string
-  role?: string
+  phone?: string
+  language?: string
   status?: string
-  avatarUrl?: string
   createdAt?: string
+  profile?: {
+    name?: string
+    avatar?: string
+  }
+  roles?: string[]
 }
 
 export default function EventsPage() {
@@ -26,7 +30,7 @@ export default function EventsPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [search, setSearch] = useState('')
-  const [sort, setSort] = useState('name')
+  const [sort, setSort] = useState('email')
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
 
@@ -49,7 +53,7 @@ export default function EventsPage() {
       const data = await res.json()
       if (!res.ok || !data.success) throw new Error(data.message || 'Failed to fetch users.')
 
-      setUsers(data.data)
+      setUsers(data.data || [])
       setTotalPages(data.pagination?.totalPages || 1)
     } catch (err: any) {
       setError(err.message || 'Network error')
@@ -62,14 +66,18 @@ export default function EventsPage() {
     fetchUsers()
   }, [search, sort, page])
 
-  if (loading) return <p className="text-center mt-6 text-[var(--text-main)]">Loading users...</p>
+  if (loading)
+    return <p className="text-center mt-6 text-[var(--text-main)]">Loading users...</p>
   if (error) return <p className="text-center mt-6 text-red-600">{error}</p>
 
   return (
-    <div className="p-4" style={{ fontFamily: 'var(--font-sans)', backgroundColor: 'var(--bg-primary)' }}>
+    <div
+      className="p-4"
+      style={{ fontFamily: 'var(--font-sans)', backgroundColor: 'var(--bg-primary)' }}
+    >
       <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
         <div className="max-sm:w-full sm:flex-1">
-          <Heading>Users (Events)</Heading>
+          <Heading>Users</Heading>
           <div className="mt-4 flex max-w-xl gap-4">
             <InputGroup>
               <MagnifyingGlassIcon className="text-[var(--color-primary)]" />
@@ -87,7 +95,7 @@ export default function EventsPage() {
               onChange={(e) => setSort(e.target.value)}
               className="bg-[var(--bg-card)] text-[var(--text-main)] border-[var(--color-earth)]"
             >
-              <option value="name">Sort by name</option>
+              <option value="email">Sort by email</option>
               <option value="createdAt">Sort by join date</option>
               <option value="status">Sort by status</option>
             </Select>
@@ -98,71 +106,81 @@ export default function EventsPage() {
         </Button>
       </div>
 
-      <table className="w-full border-collapse" style={{ borderColor: 'var(--color-earth)' }}>
-        <thead
-          style={{
-            backgroundColor: 'var(--bg-card)',
-            color: 'var(--text-main)',
-            fontWeight: 'bold',
-          }}
+      <table
+  className="w-[95%] mx-auto border-collapse text-sm"
+  style={{ borderColor: 'var(--color-earth)' }}
+>
+  <thead
+    style={{
+      backgroundColor: 'var(--bg-card)',
+      color: 'var(--text-main)',
+      fontWeight: 'bold',
+    }}
+  >
+    <tr>
+      <th className="text-left px-6 py-3">Name</th>
+      <th className="text-left px-6 py-3">Email</th>
+      <th className="text-left px-6 py-3">Phone</th>
+      <th className="text-left px-6 py-3">Role</th>
+      <th className="text-left px-6 py-3">Created</th>
+      <th className="text-right px-6 py-3">Status & Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {users.length > 0 ? (
+      users.map((user) => (
+        <tr
+          key={user.id}
+          className="hover:bg-[var(--color-primary)/10] transition-colors"
+          style={{ borderBottom: '1px solid var(--color-earth)' }}
         >
-          <tr>
-            <th className="text-left px-6 py-3">Name</th>
-            <th className="text-left px-6 py-3">Email</th>
-            <th className="text-left px-6 py-3">Role</th>
-            <th className="text-left px-6 py-3">Created</th>
-            <th className="text-right px-6 py-3">Status & Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.length > 0 ? (
-            users.map((user) => (
-              <tr
-                key={user.id}
-                className="hover:bg-[var(--color-primary)/10] transition-colors"
-                style={{ borderBottom: '1px solid var(--color-earth)' }}
-              >
-                <td className="flex items-center gap-4 px-6 py-4 text-[var(--text-main)]">
-                  <Link href={`/events/${user.id}`}>
-                    <img
-                      src={user.avatarUrl || '/default-avatar.png'}
-                      alt={user.name}
-                      className="h-12 w-12 rounded-full border shadow-md border-[var(--color-earth)]"
-                    />
-                  </Link>
-                  <Link href={`/events/${user.id}`} className="font-semibold hover:underline">
-                    {user.name || 'N/A'}
-                  </Link>
-                </td>
-                <td className="px-6 py-4 text-[var(--text-yellow)]">{user.email || '-'}</td>
-                <td className="px-6 py-4 text-[var(--text-main)]">{user.role || '-'}</td>
-                <td className="px-6 py-4 text-[var(--text-main)]">
-                  {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : '-'}
-                </td>
-                <td className="px-6 py-4 flex justify-end gap-3">
-                  <Badge color={user.status === 'Active' ? 'lime' : 'zinc'}>{user.status || 'Active'}</Badge>
-                  <Dropdown>
-                    <DropdownButton plain>
-                      <EllipsisVerticalIcon className="h-5 w-5 text-[var(--color-primary)]" />
-                    </DropdownButton>
-                    <DropdownMenu anchor="bottom end">
-                      <DropdownItem href={`/events/${user.id}`}>View</DropdownItem>
-                      <DropdownItem>Edit</DropdownItem>
-                      <DropdownItem>Delete</DropdownItem>
-                    </DropdownMenu>
-                  </Dropdown>
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan={5} className="text-center py-6 text-[var(--color-yellow)]">
-                No users found
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+          <td className="flex items-center gap-4 px-6 py-4 text-[var(--text-main)] text-sm">
+            <Link href={`/events/${user.id}`}>
+              <img
+                src={user.profile?.avatar || '/default-avatar.png'}
+                alt={user.profile?.name || 'User'}
+                className="h-10 w-10 rounded-full border shadow-md border-[var(--color-earth)]"
+              />
+            </Link>
+            <Link href={`/events/${user.id}`} className="font-semibold hover:underline">
+              {user.profile?.name || 'N/A'}
+            </Link>
+          </td>
+          <td className="px-6 py-4 text-[var(--text-yellow)] text-sm">{user.email || '-'}</td>
+          <td className="px-6 py-4 text-[var(--text-main)] text-sm">{user.phone || '-'}</td>
+          <td className="px-6 py-4 text-[var(--text-main)] text-sm">
+            {user.roles?.join(', ') || '-'}
+          </td>
+          <td className="px-6 py-4 text-[var(--text-main)] text-sm">
+            {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : '-'}
+          </td>
+          <td className="px-6 py-4 flex justify-end gap-3 text-sm">
+            <Badge color={user.status === 'ACTIVE' ? 'lime' : 'zinc'}>
+              {user.status || 'ACTIVE'}
+            </Badge>
+            <Dropdown>
+              <DropdownButton plain>
+                <EllipsisVerticalIcon className="h-5 w-5 text-[var(--color-primary)]" />
+              </DropdownButton>
+              <DropdownMenu anchor="bottom end">
+                <DropdownItem href={`/events/${user.id}`}>View</DropdownItem>
+                <DropdownItem>Edit</DropdownItem>
+                <DropdownItem>Delete</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </td>
+        </tr>
+      ))
+    ) : (
+      <tr>
+        <td colSpan={6} className="text-center py-6 text-[var(--color-yellow)] text-sm">
+          No users found
+        </td>
+      </tr>
+    )}
+  </tbody>
+</table>
+
 
       <div className="mt-4 flex justify-end gap-2">
         <Button disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
