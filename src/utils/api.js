@@ -1,43 +1,41 @@
-// ✅ src/utils/api.js
 export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 
-// Helper function for GET requests with token
-export async function fetchWithAuth(endpoint) {
+export async function fetchWithAuth(endpoint, method = 'GET', body = null) {
   const token =
     typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null
 
   const res = await fetch(`${API_BASE_URL}${endpoint}`, {
-    method: 'GET',
+    method,
     headers: {
       'Content-Type': 'application/json',
       ...(token && { Authorization: `Bearer ${token}` }),
     },
+    body: body ? JSON.stringify(body) : null,
   })
 
   if (!res.ok) {
-    // Try to read a JSON error body for more informative logging
-    let bodyText = null
+    const text = await res.text()
+    let bodyText
     try {
-      const text = await res.text()
-      // try parse JSON but fall back to raw text
-      try {
-        const parsed = JSON.parse(text)
-        bodyText = JSON.stringify(parsed)
-      } catch (e) {
-        bodyText = text
-      }
-    } catch (e) {
-      bodyText = '<unreadable response body>'
+      bodyText = JSON.stringify(JSON.parse(text))
+    } catch {
+      bodyText = text
     }
-
-    console.error('API Error:', res.status, res.statusText, bodyText)
     const err = new Error(`Request failed: ${res.status} ${res.statusText}`)
-    // attach extra info for callers / dev tools
-    err.info = { status: res.status, statusText: res.statusText, body: bodyText }
+    err.info = { status: res.status, body: bodyText }
     throw err
   }
 
-  const data = await res.json()
-  return data
+  return res.json()
 }
+
+// API helpers
+export const getPanditBookings = (todayOnly = true, limit = 50) =>
+  fetchWithAuth(`/api/pandits/pandit-bookings?todayOnly=${todayOnly}&limit=${limit}`)
+
+export const acceptBooking = (bookingId) =>
+  fetchWithAuth(`/api/pandits/accept/${bookingId}`, 'POST')
+
+export const rejectBooking = (bookingId) =>
+  fetchWithAuth(`/api/pandits/reject/${bookingId}`, 'POST')

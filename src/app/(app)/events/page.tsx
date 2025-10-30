@@ -15,7 +15,6 @@ interface User {
   id: string
   email: string
   phone?: string
-  language?: string
   status?: string
   createdAt?: string
   profile?: {
@@ -52,7 +51,6 @@ export default function EventsPage() {
 
       const data = await res.json()
       if (!res.ok || !data.success) throw new Error(data.message || 'Failed to fetch users.')
-
       setUsers(data.data || [])
       setTotalPages(data.pagination?.totalPages || 1)
     } catch (err: any) {
@@ -67,33 +65,30 @@ export default function EventsPage() {
   }, [search, sort, page])
 
   if (loading)
-    return <p className="text-center mt-6 text-[var(--text-main)]">Loading users...</p>
+    return <p className="text-center mt-6 text-[var(--color-cream)]">Loading users...</p>
   if (error) return <p className="text-center mt-6 text-red-600">{error}</p>
 
   return (
-    <div
-      className="p-4"
-      style={{ fontFamily: 'var(--font-sans)', backgroundColor: 'var(--bg-primary)' }}
-    >
-      <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
-        <div className="max-sm:w-full sm:flex-1">
-          <Heading>Users</Heading>
+    <div className="p-6 bg-[var(--color-navy)] min-h-screen font-sans text-[var(--color-cream)]">
+      <div className="flex flex-wrap items-end justify-between gap-6 mb-6">
+        <div className="flex-1 max-sm:w-full">
+          <Heading className="text-[var(--color-cream)]">Users</Heading>
           <div className="mt-4 flex max-w-xl gap-4">
             <InputGroup>
-              <MagnifyingGlassIcon className="text-[var(--color-primary)]" />
+              <MagnifyingGlassIcon className="text-[var(--color-saffron)]" />
               <Input
                 name="search"
                 placeholder="Search users…"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="bg-[var(--bg-card)] text-[var(--text-main)] placeholder-[var(--color-yellow)]"
+                className="bg-[var(--color-cream)] text-[var(--color-maroon)] placeholder-[var(--color-yellow)]"
               />
             </InputGroup>
             <Select
               name="sort_by"
               value={sort}
               onChange={(e) => setSort(e.target.value)}
-              className="bg-[var(--bg-card)] text-[var(--text-main)] border-[var(--color-earth)]"
+              className="bg-[var(--color-cream)] text-[var(--color-maroon)] border-[var(--color-earth)]"
             >
               <option value="email">Sort by email</option>
               <option value="createdAt">Sort by join date</option>
@@ -101,21 +96,16 @@ export default function EventsPage() {
             </Select>
           </div>
         </div>
-        <Button className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] text-white">
-          Create user
-        </Button>
+       <Button color="saffron">Create user</Button>
+
       </div>
 
       <table
-  className="w-[95%] mx-auto border-collapse text-sm"
+  className="w-[95%] mx-auto border-collapse text-sm rounded-lg overflow-hidden shadow-lg bg-[var(--color-cream)]"
   style={{ borderColor: 'var(--color-earth)' }}
 >
   <thead
-    style={{
-      backgroundColor: 'var(--bg-card)',
-      color: 'var(--text-main)',
-      fontWeight: 'bold',
-    }}
+    style={{ backgroundColor: 'var(--color-gold)', color: 'var(--color-maroon)', fontWeight: 'bold' }}
   >
     <tr>
       <th className="text-left px-6 py-3">Name</th>
@@ -131,10 +121,10 @@ export default function EventsPage() {
       users.map((user) => (
         <tr
           key={user.id}
-          className="hover:bg-[var(--color-primary)/10] transition-colors"
+          className="hover:bg-[var(--color-primary)/20] transition-colors cursor-pointer"
           style={{ borderBottom: '1px solid var(--color-earth)' }}
         >
-          <td className="flex items-center gap-4 px-6 py-4 text-[var(--text-main)] text-sm">
+          <td className="flex items-center gap-4 px-6 py-4 text-[var(--color-maroon)] text-sm">
             <Link href={`/events/${user.id}`}>
               <img
                 src={user.profile?.avatar || '/default-avatar.png'}
@@ -146,12 +136,10 @@ export default function EventsPage() {
               {user.profile?.name || 'N/A'}
             </Link>
           </td>
-          <td className="px-6 py-4 text-[var(--text-yellow)] text-sm">{user.email || '-'}</td>
-          <td className="px-6 py-4 text-[var(--text-main)] text-sm">{user.phone || '-'}</td>
-          <td className="px-6 py-4 text-[var(--text-main)] text-sm">
-            {user.roles?.join(', ') || '-'}
-          </td>
-          <td className="px-6 py-4 text-[var(--text-main)] text-sm">
+          <td className="px-6 py-4 text-[var(--color-yellow)] text-sm">{user.email || '-'}</td>
+          <td className="px-6 py-4 text-[var(--color-maroon)] text-sm">{user.phone || '-'}</td>
+          <td className="px-6 py-4 text-[var(--color-maroon)] text-sm">{user.roles?.join(', ') || '-'}</td>
+          <td className="px-6 py-4 text-[var(--color-maroon)] text-sm">
             {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : '-'}
           </td>
           <td className="px-6 py-4 flex justify-end gap-3 text-sm">
@@ -182,12 +170,12 @@ export default function EventsPage() {
 </table>
 
 
-      <div className="mt-4 flex justify-end gap-2">
-        <Button disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
+      <div className="mt-6 flex justify-end gap-2">
+        <Button disabled={page <= 1} onClick={() => setPage((p) => p - 1)} color="maroon">
           Previous
         </Button>
-        <span className="px-4 py-2 bg-[var(--bg-card)] rounded">{page}</span>
-        <Button disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)}>
+        <span className="px-4 py-2 bg-[var(--color-cream)] text-[var(--color-maroon)] rounded">{page}</span>
+        <Button disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)} color="maroon">
           Next
         </Button>
       </div>

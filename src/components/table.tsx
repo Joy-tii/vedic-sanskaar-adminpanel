@@ -1,21 +1,30 @@
 'use client'
 
 import clsx from 'clsx'
-import type React from 'react'
-import { createContext, useContext } from 'react'
+import React, { createContext, useContext } from 'react'
 import { Link } from './link'
 
-const TableContext = createContext<{
+interface TableContextType {
   bleed: boolean
   dense: boolean
   grid: boolean
   striped: boolean
-}>({
+}
+
+const TableContext = createContext<TableContextType>({
   bleed: false,
   dense: false,
   grid: false,
   striped: false,
 })
+
+interface TableRowContextType {
+  href?: string
+  target?: string
+  title?: string
+} 
+
+const TableRowContext = createContext<TableRowContextType>({})
 
 export function Table({
   bleed = false,
@@ -42,7 +51,9 @@ export function Table({
             !bleed && 'px-2'
           )}
         >
-          <table className="min-w-full border-collapse text-left text-sm text-[var(--color-maroon)]">
+          <table 
+            className="min-w-full border-collapse text-left text-sm text-[var(--color-maroon)] bg-[var(--color-cream)] rounded-lg shadow" // added bg and rounding
+          >
             {children}
           </table>
         </div>
@@ -51,13 +62,14 @@ export function Table({
   )
 }
 
+
 export function TableHead({ className, ...props }: React.ComponentPropsWithoutRef<'thead'>) {
   return (
     <thead
       {...props}
       className={clsx(
         className,
-        'text-black bg-[var(--color-gold)]'
+        'text-[var(--color-maroon)] bg-[var(--color-gold)] font-semibold'
       )}
     />
   )
@@ -66,12 +78,6 @@ export function TableHead({ className, ...props }: React.ComponentPropsWithoutRe
 export function TableBody(props: React.ComponentPropsWithoutRef<'tbody'>) {
   return <tbody {...props} />
 }
-
-const TableRowContext = createContext<{ href?: string; target?: string; title?: string }>({
-  href: undefined,
-  target: undefined,
-  title: undefined,
-})
 
 export function TableRow({
   href,
@@ -107,7 +113,7 @@ export function TableHeader({ className, ...props }: React.ComponentPropsWithout
         'border-b border-[var(--color-earth)] px-4 py-2 font-medium text-left first:pl-2 last:pr-2',
         grid && 'border-l border-l-[var(--color-earth)] first:border-l-0',
         !bleed && 'sm:first:pl-2 sm:last:pr-2',
-        'group-hover:bg-[var(--color-saffron)]', // <- TH hover same as row
+        'group-hover:bg-[var(--color-saffron)]',
         className
       )}
     />
@@ -116,7 +122,7 @@ export function TableHeader({ className, ...props }: React.ComponentPropsWithout
 
 export function TableCell({ className, children, ...props }: React.ComponentPropsWithoutRef<'td'>) {
   const { bleed, dense, grid } = useContext(TableContext)
-  const { href, target, title } = useContext(TableRowContext)
+  const context = useContext(TableRowContext)
 
   return (
     <td
@@ -129,15 +135,15 @@ export function TableCell({ className, children, ...props }: React.ComponentProp
         className
       )}
     >
-      {href && (
+      {context.href ? (
         <Link
           data-row-link
-          href={href}
-          target={target}
-          aria-label={title}
+          href={context.href}
+          target={context.target}
+          aria-label={context.title}
           className="absolute inset-0 focus:outline-none"
         />
-      )}
+      ) : null}
       {children}
     </td>
   )

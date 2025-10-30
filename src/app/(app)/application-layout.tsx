@@ -15,9 +15,8 @@ import {
   SidebarBody,
   SidebarFooter,
   SidebarHeader,
-  SidebarHeading,
-  SidebarItem,
   SidebarLabel,
+  SidebarItem,
   SidebarSection,
   SidebarSpacer,
 } from '@/components/sidebar'
@@ -78,16 +77,16 @@ export function ApplicationLayout({
 }: {
   events: Awaited<ReturnType<typeof getEvents>>
   children: React.ReactNode
-  /** Allow pages to request full-bleed content (no centered max-width) */
   contentWide?: boolean
 }) {
   let pathname = usePathname()
   const [bookingsOpen, setBookingsOpen] = useState(() => pathname.startsWith('/bookings'))
+  const [panditBookingsOpen, setPanditBookingsOpen] = useState(() => pathname.startsWith('/pandit/bookings'))
   const [servicesOpen, setServicesOpen] = useState(() => pathname.startsWith('/services'))
 
-  // keep sections in sync with navigation (open when visiting a child route)
-  React.useEffect(() => {
+  useEffect(() => {
     setBookingsOpen(pathname.startsWith('/bookings'))
+    setPanditBookingsOpen(pathname.startsWith('/pandit/bookings'))
     setServicesOpen(pathname.startsWith('/services'))
   }, [pathname])
 
@@ -107,72 +106,57 @@ export function ApplicationLayout({
         </Navbar>
       }
       sidebar={
-        <Sidebar>
-          {/* ---------- Sidebar Header ---------- */}
-          <SidebarHeader>
+        <Sidebar className="bg-[var(--color-cream)] text-[var(--color-maroon)]">
+          {/* Sidebar Header */}
+          <SidebarHeader className="bg-[var(--color-cream)] border-[var(--color-earth)] text-[var(--color-maroon)]">
             <Dropdown>
-              <DropdownButton as={SidebarItem}>
-                {/* show only the Vedic Sanskaar logo image (no text); keep height, increase width, not rounded */}
+              <DropdownButton as={SidebarItem} className="text-[var(--color-maroon)]">
                 <img src="/vedic_logo-removebg.png" alt="Vedic Sanskaar" className="h-10 w-30 object-contain rounded-none" />
                 <ChevronDownIcon />
               </DropdownButton>
               <DropdownMenu className="min-w-80 lg:min-w-64" anchor="bottom start">
-                <DropdownItem href="/settings">
+                <DropdownItem href="/settings" className="text-[var(--color-maroon)]">
                   <Cog8ToothIcon />
                   <DropdownLabel>Settings</DropdownLabel>
                 </DropdownItem>
                 <DropdownDivider />
-                <DropdownItem href="#">
-                  {/* only the logo image, not rounded; a bit wider while keeping height */}
-                  <img slot="icon" src="/vedic_logo-removebg.png" alt="Vedic Sanskaar" className="h-8 w-12 object-contain rounded-none" />
-                </DropdownItem>
-                <DropdownItem href="#">
-                  <Avatar slot="icon" initials="BE" className="bg-purple-500 text-white" />
-                  <DropdownLabel>Big Events</DropdownLabel>
-                </DropdownItem>
-                <DropdownDivider />
-                <DropdownItem href="#">
-                  <PlusIcon />
-                  <DropdownLabel>New team&hellip;</DropdownLabel>
-                </DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </SidebarHeader>
 
-          {/* ---------- Sidebar Body ---------- */}
+          {/* Sidebar Body */}
           <SidebarBody>
             <SidebarSection>
-              <SidebarItem href="/" current={pathname === '/'}>
+              <SidebarItem href="/" current={pathname === '/'} className="text-[var(--color-maroon)] hover:text-[var(--color-primary)]">
                 <HomeIcon />
                 <SidebarLabel>Home</SidebarLabel>
               </SidebarItem>
-              <SidebarItem href="/events" current={pathname.startsWith('/events')}>
+
+              <SidebarItem href="/events" current={pathname.startsWith('/events')} className="text-[var(--color-maroon)] hover:text-[var(--color-primary)]">
                 <Square2StackIcon />
                 <SidebarLabel>Users</SidebarLabel>
               </SidebarItem>
 
-              {/* Bookings — navigates to list; sub-links auto-open when on a bookings route */}
-              <SidebarItem href="/bookings" current={pathname.startsWith('/bookings')}> 
+              {/* User Bookings Section */}
+              <SidebarItem href="/bookings" current={pathname.startsWith('/bookings')} className="text-[var(--color-maroon)] hover:text-[var(--color-primary)]">
                 <CalendarDaysIcon />
                 <SidebarLabel>Bookings</SidebarLabel>
                 <ChevronDownIcon className={bookingsOpen ? 'ml-auto rotate-180 transition-transform' : 'ml-auto transition-transform'} />
               </SidebarItem>
-
               {bookingsOpen && (
                 <>
                   <SidebarItem
                     href="/bookings/my-bookings"
                     current={pathname === '/bookings/my-bookings'}
-                    className="pl-8 text-sm"
+                    className="pl-8 text-sm text-[var(--color-maroon)] hover:text-[var(--color-primary)]"
                   >
                     <ClipboardDocumentCheckIcon className="size-4" />
                     <SidebarLabel>My Bookings</SidebarLabel>
                   </SidebarItem>
-
                   <SidebarItem
                     href="/bookings/new"
                     current={pathname === '/bookings/new'}
-                    className="pl-8 text-sm"
+                    className="pl-8 text-sm text-[var(--color-maroon)] hover:text-[var(--color-primary)]"
                   >
                     <PlusIcon className="size-4" />
                     <SidebarLabel>New Booking</SidebarLabel>
@@ -180,83 +164,82 @@ export function ApplicationLayout({
                 </>
               )}
 
-              {/* Services — click to expand/collapse */}
-              {/* Services — navigates to services index; sub-links auto-open on child routes */}
-              <SidebarItem href="/services" current={pathname.startsWith('/services')}>
+              {/* Pandit Bookings Section */}
+              <SidebarItem href="/pandit/bookings" current={pathname.startsWith('/pandit/bookings')} className="text-[var(--color-maroon)] hover:text-[var(--color-primary)]">
+                <ClipboardDocumentCheckIcon />
+                <SidebarLabel>Pandit Bookings</SidebarLabel>
+                <ChevronDownIcon className={panditBookingsOpen ? 'ml-auto rotate-180 transition-transform' : 'ml-auto transition-transform'} />
+              </SidebarItem>
+              {panditBookingsOpen && (
+                <>
+                  <SidebarItem
+                    href="/pandit/bookings/my-bookings"
+                    current={pathname === '/pandit/bookings/my-bookings'}
+                    className="pl-8 text-sm text-[var(--color-maroon)] hover:text-[var(--color-primary)]"
+                  >
+                    <ClipboardDocumentCheckIcon className="size-4" />
+                    <SidebarLabel>My Bookings</SidebarLabel>
+                  </SidebarItem>
+                  <SidebarItem
+                    href="/pandit/bookings/new"
+                    current={pathname === '/pandit/bookings/new'}
+                    className="pl-8 text-sm text-[var(--color-maroon)] hover:text-[var(--color-primary)]"
+                  >
+                    <PlusIcon className="size-4" />
+                    <SidebarLabel>New Booking</SidebarLabel>
+                  </SidebarItem>
+                </>
+              )}
+
+              {/* Services Section */}
+              <SidebarItem href="/services" current={pathname.startsWith('/services')} className="text-[var(--color-maroon)] hover:text-[var(--color-primary)]">
                 <Square2StackIcon />
                 <SidebarLabel>Services</SidebarLabel>
                 <ChevronDownIcon className={servicesOpen ? 'ml-auto rotate-180 transition-transform' : 'ml-auto transition-transform'} />
               </SidebarItem>
-
               {servicesOpen && (
                 <>
-                  <SidebarItem
-                    href="/services"
-                    current={pathname === '/services'}
-                    className="pl-8 text-sm"
-                  >
+                  <SidebarItem href="/services" current={pathname === '/services'} className="pl-8 text-sm hover:text-[var(--color-primary)]">
                     <ClipboardDocumentCheckIcon className="size-4" />
                     <SidebarLabel>All Categories</SidebarLabel>
                   </SidebarItem>
-
-                  <SidebarItem
-                    href="/services/new"
-                    current={pathname === '/services/new'}
-                    className="pl-8 text-sm"
-                  >
+                  <SidebarItem href="/services/new" current={pathname === '/services/new'} className="pl-8 text-sm hover:text-[var(--color-primary)]">
                     <PlusIcon className="size-4" />
                     <SidebarLabel>New Service</SidebarLabel>
                   </SidebarItem>
                 </>
               )}
 
-              {/* (booking sub-links moved up to be grouped under Bookings) */}
-
               {/* Settings */}
-              <SidebarItem href="/settings" current={pathname.startsWith('/settings')}>
+              <SidebarItem href="/settings" current={pathname.startsWith('/settings')} className="text-[var(--color-maroon)] hover:text-[var(--color-primary)]">
                 <Cog6ToothIcon />
                 <SidebarLabel>Settings</SidebarLabel>
               </SidebarItem>
             </SidebarSection>
 
-            {/* ---------- Events Section ---------- */}
-            {/* <SidebarSection className="max-lg:hidden">
-              <SidebarHeading>Upcoming Events</SidebarHeading>
-              {events.map((event) => (
-                <SidebarItem key={event.id} href={event.url}>
-                  {event.name}
-                </SidebarItem>
-              ))}
-            </SidebarSection> */}
-
             <SidebarSpacer />
 
-            {/* ---------- Support & Footer ---------- */}
             <SidebarSection>
-              <SidebarItem href="#">
+              <SidebarItem href="#" className="text-[var(--color-maroon)] hover:text-[var(--color-primary)]">
                 <QuestionMarkCircleIcon />
                 <SidebarLabel>Support</SidebarLabel>
               </SidebarItem>
-              <SidebarItem href="#">
+              <SidebarItem href="#" className="text-[var(--color-maroon)] hover:text-[var(--color-primary)]">
                 <SparklesIcon />
                 <SidebarLabel>Changelog</SidebarLabel>
               </SidebarItem>
             </SidebarSection>
           </SidebarBody>
 
-          {/* ---------- Sidebar Footer ---------- */}
-          <SidebarFooter className="max-lg:hidden">
+          {/* Footer */}
+          <SidebarFooter className="max-lg:hidden bg-[var(--color-cream)] border-t border-[var(--color-earth)] text-[var(--color-maroon)]">
             <Dropdown>
               <DropdownButton as={SidebarItem}>
                 <span className="flex min-w-0 items-center gap-3">
-                  <Avatar src="/users/erica.jpg" className="size-10" square alt="" />
+                  <Avatar src="/users/erica.jpg" className="size-10" square />
                   <span className="min-w-0">
-                    <span className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">
-                      Erica
-                    </span>
-                    <span className="block truncate text-xs/5 font-normal text-zinc-500 dark:text-zinc-400">
-                      erica@example.com
-                    </span>
+                    <span className="block truncate text-sm/5 font-medium">Erica</span>
+                    <span className="block truncate text-xs/5 font-normal text-[var(--color-yellow)]">erica@example.com</span>
                   </span>
                 </span>
                 <ChevronUpIcon />
